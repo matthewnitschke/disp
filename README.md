@@ -97,7 +97,14 @@ c1 column2 c3
 column1 c2 c3
 `).columns({
   headers: ["Column 1", "Column 2", "Column 3"]
-}).headerBox();
+}).headerBox({
+  xPadding: 1,
+  yPadding: 0,
+  borderColor: chalk.red,
+  cornerChar: "+",
+  xChar: "-",
+  yChar: "|"
+});
 
 console.log(text);
 // +------------------------------------+
