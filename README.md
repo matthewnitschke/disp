@@ -119,5 +119,16 @@ adds padding to outside of text
 var text = disp(`
 text
 is
-`).margin(5, 3) // css margin rules apply. One parameter: full border. Two parameters: (y, x). Four parameters: (top, right, bottom, left)
+`).margin(1, 3)
+
+// css margin rules apply.
+//    One parameter: full border 
+//    Two parameters: (y, x)
+//    Four parameters: (top, right, bottom, left)
+
+console.log(text)
+//
+//   text   
+//   is   
+//
 ```
