@@ -27,6 +27,27 @@ console.log(disp(text)
 // |                                  |
 // +----------------------------------+
 ```
+# Macro Commands
+You can create macro functions to chain to gether commonly used styles
+```javascript
+disp.boxedHeaderTable = function(text){
+  return disp("text")
+    .columns({
+      headers: ["Header 1", "Header 2"]
+     })
+     .headerBox({
+      borderColor: chalk.red
+     })
+}
+
+var someText = `
+a b c
+aa bb cc
+aaa bbb ccc
+`
+
+console.log(disp.boxedHeaderTable(someText));
+```
 
 # Built in plugins
 
