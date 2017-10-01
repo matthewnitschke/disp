@@ -1,9 +1,9 @@
 {
   "name": "disp",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.0.1",
+  "main": "./src/disp.js",
   "repository": "https://github.com/matthewnitschke/disp.git",
-  "author": "Matthew Nitschke <mathuc33@gmail.com>",
+  "author": "Matthew Nitschke <matt@pyrtio.com>",
   "license": "MIT",
   "dependencies": {
     "chalk": "^2.1.0",
