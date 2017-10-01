@@ -32,7 +32,7 @@ console.log(disp(text)
 
 # Built in plugins
 
-## box
+### box
 Surrounds text in a box
 ```javascript
 disp("text").box({
@@ -45,13 +45,13 @@ disp("text").box({
 });
 ```
 
-## color
+### color
 Changes the color of the text
 ```javascript
 disp("text").color(chalk.green);
 ```
 
-## justify
+### justify
 Aligns the text
 ```javascript
 disp("text").justify("center"); // "center" or "right"
