@@ -54,3 +54,13 @@ Aligns the text
 ```javascript
 disp("text").justify("center"); // "center" or "right"
 ```
+
+### columns
+Justifies lines in columns based off of a regex expression
+```javascript
+disp(`
+c1 c2 column3
+c1 column2 c3
+column1 c2 c3
+`).columns()
+```
