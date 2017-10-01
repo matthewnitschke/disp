@@ -1,0 +1,12 @@
+{
+  "name": "disp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/matthewnitschke/disp.git",
+  "author": "Matthew Nitschke <mathuc33@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "strip-ansi": "^4.0.0"
+  }
+}

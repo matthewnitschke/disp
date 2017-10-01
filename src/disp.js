@@ -1,4 +1,4 @@
-tripAnsi = require('strip-ansi')
+var stripAnsi = require('strip-ansi')
 
 'use strict';
 module.exports = (() => {
@@ -17,7 +17,7 @@ module.exports = (() => {
 
     function getLongestLine(lines){
         return lines.reduce((accumulator, item) => {
-            return stripAnsi(item).length > accumulator ? stripAnsi(item).length : accumulator; 
+            return stripAnsi(item).length > accumulator ? stripAnsi(item).length : accumulator;
         }, 0);
     }
 
@@ -100,11 +100,11 @@ module.exports = (() => {
     disp.prototype.bracketify = function() {
         return new disp("{" + this.text + "}");
     }
-    
+
     disp.prototype.prefix = function() {
         return new disp("aa: " + this.text);
     }
-    
+
     disp.prototype.toString = function(){
         return this.text;
     }
@@ -117,4 +117,3 @@ module.exports = (() => {
     }
 
 })();
-
