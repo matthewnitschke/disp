@@ -52,7 +52,6 @@ module.exports = (() => {
             ret += `${yChar}${repeatedChar(" ", longestLine + (options.xPadding * 2))}${yChar}\n`;
         }
 
-        // ret += `${yChar}` + repeatedChar(" ", options.xPadding) + lines.join('\n') + repeatedChar(" ", options.xPadding) + `${yChar}\n`;
         lines.forEach((line) => {
             ret += `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}|\n`
         })
@@ -95,12 +94,49 @@ module.exports = (() => {
         return new disp(lines.join("\n"));
     }
 
-    disp.prototype.bracketify = function() {
-        return new disp("{" + this.text + "}");
-    }
+    disp.prototype.columns = function(options){
+      options = Object.assign({
+        columnSeparater: /(\w)+/gm,
+        cellPadding: 5
+      }, options)
 
-    disp.prototype.prefix = function() {
-        return new disp("aa: " + this.text);
+      var data = [];
+
+      var lines = this.text.trim().split("\n");
+      lines.forEach((line) => {
+        var matches = line.match(options.columnSeparater);
+        data.push(matches);
+      });
+
+      var columnWidths = [];
+      data.forEach((row) => {
+        row.forEach((cell, i) => {
+          var cellLen = getLineLength(cell);
+          if (i >= columnWidths.length){
+            columnWidths.push(cellLen);
+          } else {
+            if (cellLen > columnWidths[i]){
+              columnWidths[i] = cellLen;
+            }
+          }
+        });
+      });
+
+      data = data.map((row) => {
+        return row.map((cell, i, rowArr) => {
+          var cellLen = getLineLength(cell);
+          var padding = columnWidths[i] - cellLen;
+
+          if (i < rowArr.length-1){
+            padding += options.cellPadding;
+          }
+
+          return cell + repeatedChar(" ", padding);
+        }).join("");
+      })
+
+      return new disp(data.join("\n"));
+
     }
 
     disp.prototype.toString = function(){
