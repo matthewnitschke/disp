@@ -53,7 +53,7 @@ module.exports = (() => {
         }
 
         lines.forEach((line) => {
-            ret += `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}|\n`
+            ret += `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}${yChar}\n`
         })
 
         for(var i = 0; i < options.yPadding; i ++){
@@ -97,7 +97,8 @@ module.exports = (() => {
     disp.prototype.columns = function(options){
       options = Object.assign({
         columnSeparater: /(\w)+/gm,
-        cellPadding: 5
+        cellPadding: 5,
+        headers: []
       }, options)
 
       var data = [];
@@ -107,6 +108,10 @@ module.exports = (() => {
         var matches = line.match(options.columnSeparater);
         data.push(matches);
       });
+
+      if (options.headers.length > 0){
+        data.unshift(options.headers);
+      }
 
       var columnWidths = [];
       data.forEach((row) => {
@@ -121,6 +126,8 @@ module.exports = (() => {
           }
         });
       });
+
+
 
       data = data.map((row) => {
         return row.map((cell, i, rowArr) => {
@@ -137,6 +144,25 @@ module.exports = (() => {
 
       return new disp(data.join("\n"));
 
+    }
+
+    disp.prototype.headerBox = function(options){
+      var res = disp.prototype.box.call(this, options);
+
+      var lines = res.text.split("\n");
+
+      var lineLength = getLineLength(lines[0]);
+
+      var cornerChar = stripAnsi(lines[0])[0];
+      var headerLineChar = "-";
+      if (options.borderColor){
+        cornerChar = options.borderColor(cornerChar);
+        headerLineChar = options.borderColor(headerLineChar);
+      }
+
+      lines.splice(2, 0, `${cornerChar}${repeatedChar(headerLineChar, lineLength-2)}${cornerChar}`);
+
+      return new disp(lines.join("\n"))
     }
 
     disp.prototype.toString = function(){
