@@ -1,10 +1,13 @@
 var disp = require("../src/disp.js")
 var chalk = require("chalk");
 
-var text = disp(`asdfew 23
-asdfewsadf34 3t3w4 t
-a4 taw4t 234t`).box({
+var text = disp(`
+  a b c
+  aa bb cc
+  aaa bbb ccc`)
+.columns()
+.box({
   headerBorder: true
-});
+}).margin(2, 5);
 
 console.log(text);

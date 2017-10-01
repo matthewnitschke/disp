@@ -76,7 +76,7 @@ module.exports = (() => {
       ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", " ");
     }
 
-    ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
+    ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar).replace("\n", ""); // remove the newline from generateSolidLine() because it it last item
 
     return new disp(ret);
 
@@ -151,8 +151,6 @@ module.exports = (() => {
       });
     });
 
-
-
     data = data.map((row) => {
       return row.map((cell, i, rowArr) => {
         var cellLen = getLineLength(cell);
@@ -167,6 +165,49 @@ module.exports = (() => {
     })
 
     return new disp(data.join("\n"));
+  }
+
+  disp.prototype.trim = function(options){
+    return new disp(this.text.trim());
+  }
+
+  disp.prototype.margin = function(one, two, three, four){
+    var options = {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    }
+    if (one && !two && !three && !four){
+      // full margin
+      options.top = options.right = options.bottom = options.left = one;
+    } else if (one && two && !three && !four){
+      // y and x
+      options.top = options.bottom = one;
+      options.right = options.left = two;
+
+    } else if (one && two && three && four){
+      // top, right, bottom, left
+      options.top = one;
+      options.right = two;
+      options.bottom = three;
+      options.left = four;
+    }
+
+    var ret = "";
+    for(var i = 0; i < options.top; i++){
+      ret += "\n";
+    }
+
+    ret += this.text.split("\n").map((line) => {
+      return repeatedChar(" ", options.left) + line + repeatedChar(" ", options.right);
+    }).join("\n");
+
+    for(var i = 0; i < options.bottom; i++){
+      ret += "\n";
+    }
+
+    return new disp(ret);
 
   }
 
