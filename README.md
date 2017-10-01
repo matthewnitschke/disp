@@ -29,3 +29,30 @@ console.log(disp(text)
 // |                                  |
 // +----------------------------------+
 ```
+
+# Built in plugins
+
+## box
+Surrounds text in a box
+```javascript
+disp("text").box({
+  xPadding: 1,
+  yPadding: 0,
+  borderColor: chalk.red,
+  cornerChar: "+",
+  xChar: "-",
+  yChar: "|"
+});
+```
+
+## color
+Changes the color of the text
+```javascript
+disp("text").color(chalk.green);
+```
+
+## justify
+Aligns the text
+```javascript
+disp("text").justify("center"); // "center" or "right"
+```
