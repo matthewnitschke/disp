@@ -46,8 +46,6 @@ module.exports = (() => {
         var lines = this.text.split('\n');
         var longestLine = getLongestLine(lines);
 
-        console.log(lines[1]);
-
         var ret = `${cornerChar}${repeatedChar(xChar, longestLine + (options.xPadding * 2))}${cornerChar}\n`;
 
         for(var i = 0; i < options.yPadding; i ++){
