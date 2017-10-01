@@ -2,11 +2,17 @@
 
 A nodejs cli console logging tool library
 
+# Installation
+```
+npm i disp
+OR
+yarn add disp
+```
 # Usage
 
 ```javascript
 
-var disp = require('src/disp.js');
+var disp = require('disp');
 
 var text = `This is some text
 This is another line of text
