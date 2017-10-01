@@ -72,7 +72,9 @@ console.log(text);
 ### color
 Changes the color of the text
 ```javascript
-disp("text").color(chalk.green);
+disp("text").color(chalk.green, {
+  selector: /([\s\S]*)/gm // selects what will be colored
+});
 ```
 
 ### justify
