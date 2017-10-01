@@ -35,8 +35,9 @@ disp.boxedHeaderTable = function(text){
     .columns({
       headers: ["Header 1", "Header 2"]
      })
-     .headerBox({
-      borderColor: chalk.red
+     .box({
+      borderColor: chalk.red,
+      headerBorder: true
      })
 }
 
@@ -60,7 +61,8 @@ var text = disp("text").box({
   borderColor: chalk.red,
   cornerChar: "+",
   xChar: "-",
-  yChar: "|"
+  yChar: "|",
+  headerBorder: false
 });
 
 console.log(text);
@@ -109,32 +111,4 @@ console.log(text);
 // c1           c2           column3
 // c1           column2      c3
 // column1      c2           c3
-```
-
-### headerBox
-A subset of `box`. Puts a border around the header items as well
-```javascript
-var text = disp(`
-c1 c2 column3
-c1 column2 c3
-column1 c2 c3
-`).columns({
-  headers: ["Column 1", "Column 2", "Column 3"]
-}).headerBox({
-  xPadding: 1,
-  yPadding: 0,
-  borderColor: chalk.red,
-  cornerChar: "+",
-  xChar: "-",
-  yChar: "|"
-});
-
-console.log(text);
-// +------------------------------------+
-// | Column 1     Column 2     Column 3 |
-// +------------------------------------+
-// | c1           c2           column3  |
-// | c1           column2      c3       |
-// | column1      c2           c3       |
-// +------------------------------------+
 ```
