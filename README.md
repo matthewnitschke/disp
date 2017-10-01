@@ -33,7 +33,7 @@ console.log(disp(text)
 ### box
 Surrounds text in a box
 ```javascript
-disp("text").box({
+var text = disp("text").box({
   xPadding: 1,
   yPadding: 0,
   borderColor: chalk.red,
@@ -41,6 +41,11 @@ disp("text").box({
   xChar: "-",
   yChar: "|"
 });
+
+console.log(text);
+// +------+
+// | text |
+// +------+
 ```
 
 ### color
@@ -52,15 +57,53 @@ disp("text").color(chalk.green);
 ### justify
 Aligns the text
 ```javascript
-disp("text").justify("center"); // "center" or "right"
+var text = disp(`
+this is some text
+text
+BLERG I AM TEXT
+`).justify("center"); // "center" or "right"
+
+console.log(text)
+// this is some text
+//       text
+//  BLERG I AM TEXT
 ```
 
 ### columns
 Justifies lines in columns based off of a regex expression
 ```javascript
-disp(`
+var text = disp(`
 c1 c2 column3
 c1 column2 c3
 column1 c2 c3
-`).columns()
+`).columns({
+  headers: ["Column 1", "Column 2", "Column 3"]
+})
+
+console.log(text);
+// Column 1     Column 2     Column 3
+// c1           c2           column3
+// c1           column2      c3
+// column1      c2           c3
+```
+
+### headerBox
+A subset of `box`. Puts a border around the header items as well
+```javascript
+var text = disp(`
+c1 c2 column3
+c1 column2 c3
+column1 c2 c3
+`).columns({
+  headers: ["Column 1", "Column 2", "Column 3"]
+}).headerBox();
+
+console.log(text);
+// +------------------------------------+
+// | Column 1     Column 2     Column 3 |
+// +------------------------------------+
+// | c1           c2           column3  |
+// | c1           column2      c3       |
+// | column1      c2           c3       |
+// +------------------------------------+
 ```
