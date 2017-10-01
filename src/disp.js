@@ -66,8 +66,16 @@ module.exports = (() => {
 
     }
 
-    disp.prototype.color = function(color) {
-        return new disp(color(this.text));
+    disp.prototype.color = function(color, options) {
+      options = Object.assign({
+        selector: /([\s\S]*)/gm
+      }, options);
+
+      var ret = this.text.replace(options.selector, (match, p1) => {
+        return color(p1);
+      });
+
+      return new disp(ret);
     }
 
     disp.prototype.justify = function(direction, options){

@@ -2,11 +2,9 @@ var disp = require("../src/disp.js")
 var chalk = require("chalk");
 
 var text = disp(`
-c1 c2 column3
-c1 column2 c3
-column1 c2 c3
-`).columns({
-  headers: ["Column 1", "Column 2", "Column 3"]
-}).headerBox()
+asdfew 23
+asdfewsadf34 3t3w4 t
+a4 taw4t 234t
+`).color(chalk.red);
 
 console.log(text);
