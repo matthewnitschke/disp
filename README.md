@@ -77,6 +77,7 @@ c1 c2 column3
 c1 column2 c3
 column1 c2 c3
 `).columns({
+  columnSeparater: /(\w)+/gm, // each capture group for each line is separated into a column
   headers: ["Column 1", "Column 2", "Column 3"]
 })
 
