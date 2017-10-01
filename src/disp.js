@@ -155,7 +155,7 @@ module.exports = (() => {
 
       var cornerChar = stripAnsi(lines[0])[0];
       var headerLineChar = "-";
-      if (options.borderColor){
+      if (options && options.borderColor){
         cornerChar = options.borderColor(cornerChar);
         headerLineChar = options.borderColor(headerLineChar);
       }
