@@ -3,185 +3,182 @@ var stripAnsi = require('strip-ansi')
 'use strict';
 module.exports = (() => {
 
-    function repeatedChar(char, amount, color) {
-        var ret = "";
-        for(var i = 0; i < amount; i ++){
-            if (color){
-                ret += color(char);
-            } else {
-                ret += char;
-            }
-        }
-        return ret;
+  function repeatedChar(char, amount, color) {
+    var ret = "";
+    for (var i = 0; i < amount; i++) {
+      if (color) {
+        ret += color(char);
+      } else {
+        ret += char;
+      }
+    }
+    return ret;
+  }
+
+  function getLongestLine(lines) {
+    return lines.reduce((accumulator, item) => {
+      return stripAnsi(item).length > accumulator ? stripAnsi(item).length : accumulator;
+    }, 0);
+  }
+
+  function getLineLength(line) {
+    return stripAnsi(line).length;
+  }
+
+  function disp(text) {
+    this.text = text;
+  }
+
+  disp.prototype.box = function(options) {
+    function generateBodyLine(line, yChar, longestLine){
+      return `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}${yChar}\n`
+    }
+    function generateSolidLine(length, cornerChar, xChar){
+      return `${cornerChar}${repeatedChar(xChar, length)}${cornerChar}\n`;
     }
 
-    function getLongestLine(lines){
-        return lines.reduce((accumulator, item) => {
-            return stripAnsi(item).length > accumulator ? stripAnsi(item).length : accumulator;
-        }, 0);
+    options = Object.assign({
+      xPadding: 1,
+      yPadding: 0,
+      borderColor: a => {
+        return a
+      },
+      cornerChar: "+",
+      xChar: "-",
+      yChar: "|",
+      headerBorder: false
+    }, options);
+
+    var cornerChar = options.borderColor(options.cornerChar);
+    var xChar = options.borderColor(options.xChar);
+    var yChar = options.borderColor(options.yChar);
+
+    var lines = this.text.split('\n');
+    var longestLine = getLongestLine(lines);
+
+    var ret = generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
+
+    if (options.headerBorder) {
+      var headerLine = lines.shift();
+      ret += generateBodyLine(headerLine, yChar, longestLine);
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
     }
 
-    function getLineLength(line){
-        return stripAnsi(line).length;
+    for (var i = 0; i < options.yPadding; i++) {
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", " ");
     }
 
-    function disp(text){
-        this.text = text;
+    lines.forEach((line) => {
+      ret += generateBodyLine(line, yChar, longestLine);
+    })
+
+    for (var i = 0; i < options.yPadding; i++) {
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", " ");
     }
 
-    disp.prototype.box = function(options) {
-        options = Object.assign({
-            xPadding: 1,
-            yPadding: 0,
-            borderColor: a => { return a },
-            cornerChar: "+",
-            xChar: "-",
-            yChar: "|"
-        }, options);
+    ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
 
-        var cornerChar = options.borderColor(options.cornerChar);
-        var xChar = options.borderColor(options.xChar);
-        var yChar = options.borderColor(options.yChar);
+    return new disp(ret);
 
-        var lines = this.text.split('\n');
-        var longestLine = getLongestLine(lines);
+  }
 
-        var ret = `${cornerChar}${repeatedChar(xChar, longestLine + (options.xPadding * 2))}${cornerChar}\n`;
+  disp.prototype.color = function(color, options) {
+    options = Object.assign({
+      selector: /([\s\S]*)/gm
+    }, options);
 
-        for(var i = 0; i < options.yPadding; i ++){
-            ret += `${yChar}${repeatedChar(" ", longestLine + (options.xPadding * 2))}${yChar}\n`;
-        }
+    var ret = this.text.replace(options.selector, (match, p1) => {
+      return color(p1);
+    });
 
-        lines.forEach((line) => {
-            ret += `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}${yChar}\n`
-        })
+    return new disp(ret);
+  }
 
-        for(var i = 0; i < options.yPadding; i ++){
-            ret += `${yChar}${repeatedChar(" ", longestLine + (options.xPadding * 2))}${yChar}\n`;
-        }
+  disp.prototype.justify = function(direction, options) {
+    options = Object.assign({
+      paddingChar: " "
+    }, options);
 
-        ret += `${cornerChar}${repeatedChar(xChar, longestLine + (options.xPadding * 2))}${cornerChar}`;
+    var lines = this.text.split('\n');
+    var longestLine = getLongestLine(lines);
 
-        return new disp(ret);
+    lines = lines.map((line) => {
+      var lineLen = getLineLength(line);
 
-    }
-
-    disp.prototype.color = function(color, options) {
-      options = Object.assign({
-        selector: /([\s\S]*)/gm
-      }, options);
-
-      var ret = this.text.replace(options.selector, (match, p1) => {
-        return color(p1);
-      });
-
-      return new disp(ret);
-    }
-
-    disp.prototype.justify = function(direction, options){
-        options = Object.assign({
-            paddingChar: " "
-        }, options);
-
-        var lines = this.text.split('\n');
-        var longestLine = getLongestLine(lines);
-
-        lines = lines.map((line) => {
-            var lineLen = getLineLength(line);
-
-            var padding;
-            if (direction == "right"){
-                padding = (longestLine - lineLen);
-            } else if (direction == "center") {
-                padding = (longestLine - lineLen) / 2;
-            }
-
-            return repeatedChar(" ", padding) + line;
-        })
-
-        return new disp(lines.join("\n"));
-    }
-
-    disp.prototype.columns = function(options){
-      options = Object.assign({
-        columnSeparater: /(\w)+/gm,
-        cellPadding: 5,
-        headers: []
-      }, options)
-
-      var data = [];
-
-      var lines = this.text.trim().split("\n");
-      lines.forEach((line) => {
-        var matches = line.match(options.columnSeparater);
-        data.push(matches);
-      });
-
-      if (options.headers.length > 0){
-        data.unshift(options.headers);
+      var padding;
+      if (direction == "right") {
+        padding = (longestLine - lineLen);
+      } else if (direction == "center") {
+        padding = (longestLine - lineLen) / 2;
       }
 
-      var columnWidths = [];
-      data.forEach((row) => {
-        row.forEach((cell, i) => {
-          var cellLen = getLineLength(cell);
-          if (i >= columnWidths.length){
-            columnWidths.push(cellLen);
-          } else {
-            if (cellLen > columnWidths[i]){
-              columnWidths[i] = cellLen;
-            }
+      return repeatedChar(" ", padding) + line;
+    })
+
+    return new disp(lines.join("\n"));
+  }
+
+  disp.prototype.columns = function(options) {
+    options = Object.assign({
+      columnSeparater: /(\w)+/gm,
+      cellPadding: 5,
+      headers: []
+    }, options)
+
+    var data = [];
+
+    var lines = this.text.trim().split("\n");
+    lines.forEach((line) => {
+      var matches = line.match(options.columnSeparater);
+      data.push(matches);
+    });
+
+    if (options.headers.length > 0) {
+      data.unshift(options.headers);
+    }
+
+    var columnWidths = [];
+    data.forEach((row) => {
+      row.forEach((cell, i) => {
+        var cellLen = getLineLength(cell);
+        if (i >= columnWidths.length) {
+          columnWidths.push(cellLen);
+        } else {
+          if (cellLen > columnWidths[i]) {
+            columnWidths[i] = cellLen;
           }
-        });
+        }
       });
+    });
 
 
 
-      data = data.map((row) => {
-        return row.map((cell, i, rowArr) => {
-          var cellLen = getLineLength(cell);
-          var padding = columnWidths[i] - cellLen;
+    data = data.map((row) => {
+      return row.map((cell, i, rowArr) => {
+        var cellLen = getLineLength(cell);
+        var padding = columnWidths[i] - cellLen;
 
-          if (i < rowArr.length-1){
-            padding += options.cellPadding;
-          }
+        if (i < rowArr.length - 1) {
+          padding += options.cellPadding;
+        }
 
-          return cell + repeatedChar(" ", padding);
-        }).join("");
-      })
+        return cell + repeatedChar(" ", padding);
+      }).join("");
+    })
 
-      return new disp(data.join("\n"));
+    return new disp(data.join("\n"));
 
-    }
+  }
 
-    disp.prototype.headerBox = function(options){
-      var res = disp.prototype.box.call(this, options);
+  disp.prototype.toString = function() {
+    return this.text;
+  }
+  disp.prototype.inspect = function() {
+    return this.text;
+  }
 
-      var lines = res.text.split("\n");
-
-      var lineLength = getLineLength(lines[0]);
-
-      var cornerChar = stripAnsi(lines[0])[0];
-      var headerLineChar = "-";
-      if (options && options.borderColor){
-        cornerChar = options.borderColor(cornerChar);
-        headerLineChar = options.borderColor(headerLineChar);
-      }
-
-      lines.splice(2, 0, `${cornerChar}${repeatedChar(headerLineChar, lineLength-2)}${cornerChar}`);
-
-      return new disp(lines.join("\n"))
-    }
-
-    disp.prototype.toString = function(){
-        return this.text;
-    }
-    disp.prototype.inspect = function(){
-        return this.text;
-    }
-
-    return (text) => {
-        return new disp(text);
-    }
+  return (text) => {
+    return new disp(text);
+  }
 
 })();
