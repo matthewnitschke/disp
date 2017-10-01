@@ -8,14 +8,12 @@ A nodejs cli console logging tool library
 
 var disp = require('src/disp.js');
 
-var text = `
-This is some text
+var text = `This is some text
 This is another line of text
-Yea it's another line again
-`
+Yea it's another line again`
 
 console.log(disp(text)
-  .center()
+  .justify("center")
   .box({
     xPadding: 3,
     yPadding: 1
