@@ -135,7 +135,7 @@ is
 
 console.log(text)
 //
-//                                                           text   
-//                                                           is   
+//                                                      text   
+//                                                      is   
 //
 ```
