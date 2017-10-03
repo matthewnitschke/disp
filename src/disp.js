@@ -194,12 +194,38 @@ module.exports = (() => {
       options.left = four;
     }
 
+    var lines = this.text.split("\n")
+
+    if (options.top == "auto" || options.bottom == "auto"){
+      var terminalHeight = process.stdout.rows;
+      var outputLines = lines.length;
+      var center = (terminalHeight/2) - (outputLines/2)
+      if (options.top == "auto"){
+        options.top = center;
+      }
+      if (options.bottom == "auto"){
+        options.bottom = center - 1; // account for the ending line
+      }
+    }
+
+    if (options.left == "auto" || options.right == "auto"){
+      var terminalWidth = process.stdout.columns;
+      var longestLine = getLongestLine(lines);
+      var center = (terminalWidth/2) - (longestLine/2);
+      if(options.left == "auto"){
+        options.left = center;
+      }
+      if (options.right == "auto"){
+        options.right = center;
+      }
+    }
+
     var ret = "";
     for(var i = 0; i < options.top; i++){
       ret += "\n";
     }
 
-    ret += this.text.split("\n").map((line) => {
+    ret += lines.map((line) => {
       return repeatedChar(" ", options.left) + line + repeatedChar(" ", options.right);
     }).join("\n");
 
