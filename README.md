@@ -125,7 +125,8 @@ adds padding to outside of text
 var text = disp(`
 text
 is
-`).margin("auto", 3) // parameter values can be integers or "auto", auto will center the text in the terminal window
+`).margin("auto", 3) 
+// parameter values can be integers or "auto", auto will center the text in the terminal window
 
 // css margin rules apply.
 //    One parameter: full border 
