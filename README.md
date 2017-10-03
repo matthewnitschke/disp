@@ -125,7 +125,7 @@ adds padding to outside of text
 var text = disp(`
 text
 is
-`).margin("auto", 3) 
+`).margin(1, "auto") 
 // parameter values can be integers or "auto", auto will center the text in the terminal window
 
 // css margin rules apply.
@@ -135,7 +135,7 @@ is
 
 console.log(text)
 //
-//   text   
-//   is   
+//                                                           text   
+//                                                           is   
 //
 ```
