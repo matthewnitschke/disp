@@ -1,6 +1,6 @@
 {
   "name": "disp",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "./src/disp.js",
   "repository": "https://github.com/matthewnitschke/disp.git",
   "author": "Matthew Nitschke <matt@pyrtio.com>",
