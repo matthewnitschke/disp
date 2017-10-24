@@ -7,7 +7,8 @@ var text = disp(`
   aaa bbb ccc`)
 .columns()
 .box({
-  headerBorder: true
+  headerBorder: true,
+  cornerChar: "% # @ !"
 }).margin(2, 5);
 
 console.log(text);

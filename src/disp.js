@@ -33,8 +33,8 @@ module.exports = (() => {
     function generateBodyLine(line, yChar, longestLine){
       return `${yChar}${repeatedChar(" ", options.xPadding)}${line}${repeatedChar(" ", options.xPadding + (longestLine - getLineLength(line)))}${yChar}\n`
     }
-    function generateSolidLine(length, cornerChar, xChar){
-      return `${cornerChar}${repeatedChar(xChar, length)}${cornerChar}\n`;
+    function generateSolidLine(length, cornerLeft, cornerRight, xChar){
+      return `${cornerLeft}${repeatedChar(xChar, length)}${cornerRight}\n`;
     }
 
     options = Object.assign({
@@ -49,23 +49,34 @@ module.exports = (() => {
       headerBorder: false
     }, options);
 
-    var cornerChar = options.borderColor(options.cornerChar);
+    var cornerChar = options.cornerChar;
+    var cornerParse = cornerChar.split(' ');
+    var corners = {};
+    if (cornerParse.length > 1){
+      corners.topLeft = options.borderColor(cornerParse[0]);
+      corners.topRight = options.borderColor(cornerParse[1]);
+      corners.bottomRight = options.borderColor(cornerParse[2]);
+      corners.bottomLeft = options.borderColor(cornerParse[3]);
+    } else {
+      corners.topRight = corners.topLeft = corners.bottomRight = corners.bottomLeft = cornerChar; 
+    }
+
     var xChar = options.borderColor(options.xChar);
     var yChar = options.borderColor(options.yChar);
 
     var lines = this.text.split('\n');
     var longestLine = getLongestLine(lines);
 
-    var ret = generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
+    var ret = generateSolidLine(longestLine + (options.xPadding * 2), corners.topLeft, corners.topRight, xChar);
 
     if (options.headerBorder) {
       var headerLine = lines.shift();
       ret += generateBodyLine(headerLine, yChar, longestLine);
-      ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar);
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), corners.bottomLeft, corners.bottomRight, xChar);
     }
 
     for (var i = 0; i < options.yPadding; i++) {
-      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", " ");
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", "|", " ");
     }
 
     lines.forEach((line) => {
@@ -73,10 +84,10 @@ module.exports = (() => {
     })
 
     for (var i = 0; i < options.yPadding; i++) {
-      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", " ");
+      ret += generateSolidLine(longestLine + (options.xPadding * 2), "|", "|", " ");
     }
 
-    ret += generateSolidLine(longestLine + (options.xPadding * 2), cornerChar, xChar).replace("\n", ""); // remove the newline from generateSolidLine() because it it last item
+    ret += generateSolidLine(longestLine + (options.xPadding * 2), corners.bottomLeft, corners.bottomRight, xChar).replace("\n", ""); // remove the newline from generateSolidLine() because it it last item
 
     return new disp(ret);
 
