@@ -78,7 +78,7 @@ console.log(text);
 ```
 
 ### color
-Changes the color of the text. Designed to be used by the the (chalk)[https://github.com/chalk/chalk] library, but any will work.
+Changes the color of the text. Designed to be used by the the [chalk](https://github.com/chalk/chalk) library, but any will work.
 ```javascript
 const chalk = require('chalk')
 disp("text").color(chalk.green, {
