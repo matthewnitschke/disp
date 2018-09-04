@@ -34,7 +34,7 @@ console.log(disp(text)
 // +----------------------------------+
 ```
 # Macro Commands
-You can create macro functions to chain to gether commonly used styles
+You can create macro functions to chain together commonly used styles
 ```javascript
 disp.boxedHeaderTable = function(text){
   return disp("text")
