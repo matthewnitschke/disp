@@ -40,11 +40,11 @@ disp.boxedHeaderTable = function(text){
   return disp("text")
     .columns({
       headers: ["Header 1", "Header 2"]
-     })
-     .box({
+    })
+    .box({
       borderColor: chalk.red,
       headerBorder: true
-     })
+    })
 }
 
 var someText = `
